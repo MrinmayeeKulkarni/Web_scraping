@@ -1,17 +1,16 @@
-import os
-from bs4 import BeautifulSoup as bs
-import requests
-import pymongo
-from splinter import Browser
-import pandas as pd
-import time
-
-def init_browser():
-    executable_path = {"executable_path": r"C:\Users\mrunm\GitLab\GWARL201902DATA3\01-Lesson-Plans\12-Web-Scraping-and-Document-Databases\2\Activities\07-Ins_Splinter\Solved\chromedriver.exe"}
-    return Browser("chrome", **executable_path, headless=False)
-
 def scrape():
-    browser=init_browser()
+    import os
+    from bs4 import BeautifulSoup as bs
+    import requests
+    import pymongo
+    from splinter import Browser
+    import pandas as pd
+    import time
+
+
+    executable_path = {"executable_path": r"C:\Users\mrunm\GitLab\GWARL201902DATA3\01-Lesson-Plans\12-Web-Scraping-and-Document-Databases\2\Activities\07-Ins_Splinter\Solved\chromedriver.exe"}
+    browser=Browser("chrome", **executable_path, headless=False)
+
     #NASA News
     url_nasa='https://mars.nasa.gov/news/'
     browser.visit(url_nasa)
@@ -26,6 +25,7 @@ def scrape():
     browser.visit(url_img)
     time.sleep(1)
     browser.click_link_by_partial_text('FULL IMAGE')
+    time.sleep(5)
     browser.click_link_by_partial_text('more info')
     html=browser.html
     soup=bs(html,'html.parser')
@@ -36,6 +36,8 @@ def scrape():
     url_twt='https://twitter.com/marswxreport?lang=en'
     browser.visit(url_twt)
     time.sleep(1)
+    html=browser.html
+    soup=bs(html,'html.parser')
     mars_weather=soup.find('div',class_="js-tweet-text-container").find('p').text
 
     #Mars Facts
@@ -46,6 +48,8 @@ def scrape():
     mars_df.columns=['Description','Value']
     mars_df.set_index('Description',inplace=True)
     mars_data=mars_df
+    html_table = mars_data.to_html(header=False,index=False).replace('\n', '')
+    html_table = html_table.replace('\n', '')
 
     #Mars Hemispheres
     url_astro='https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
@@ -56,6 +60,7 @@ def scrape():
     results=soup.find_all('div',class_="item")
     hemisphere_image_urls=[]
     base_url='https://astrogeology.usgs.gov'
+    
     for result in results:
         titles=result.find('h3').text
         link_to_fullsize=result.find('a',class_="itemLink product-item")['href']
@@ -66,14 +71,15 @@ def scrape():
         img_url=base_url + soup.find('img',class_="wide-image")['src']
         hemisphere_image_urls.append({"Title":titles,"Image_url":img_url})
 
-
-    mars_data={
+    browser.quit()
+    
+    mars_dict={
       "title_news":news_title,
       "news_desc":news_p,
       "featured_img":featured_img_url,
       "mars_weather":mars_weather,
-      "mars_facts":mars_data,
-      "mars_hemisphers":[hemisphere_image_urls]
+      "mars_facts":html_table,
+      "mars_hemisphers":hemisphere_image_urls
     }
-    browser.quit()
-    return scrape
+    
+    return mars_dict
