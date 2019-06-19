@@ -10,20 +10,93 @@
 </head>
 
 <body>
-  <div class="container-fluid">
-    <div class="jumbotron text-center">
+  <div class="container">
+    <div class="jumbotron text-center" style="width: 100%">
       <h1>Mission to Mars</h1>
       <p><a class="btn btn-primary btn-lg" href="/scrape" role="button">Scrape New Data</a></p>
     </div>
-    <h2>Latest Mars News</h2>
-    <h3>{{ mars_page.title_news }}</h3>
-    <h3>{{ mars_page.news_desc }}</h3>
-    <h4>Featured Mars Image</h4>
-    <img src="{{ mars_page.featured_img }}" alt="Image">
-    
-    
-  </div>
-  </div>
+    <div>
+    <div class="row">
+      <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Latest Mars News</h3>
+            </div>
+            <div class="panel-body">  
+              <h4>{{ mars_page.title_news }}</h4>
+              <p>{{ mars_page.news_desc }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title"> Current Weather on Mars</h3>
+            </div>
+            <div class="panel-body">
+              <p>{{ mars_page.mars_weather }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Mars Facts</h3>
+            </div>
+            <div class="panel-body">
+              <table>
+                {{ mars_page.mars_facts|safe}}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Featured Mars Image</h3>
+            </div>
+            <div class="panel-body">
+              <img src= {{mars_page.featured_img}} alt="Featured Image" class="img-responsive">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Mars Hemispheres</h3>
+            </div>
+            <div class="panel-body">
+              <div class="thumbnail" style="width: 50%; float:left;">
+                <img src= {{ mars_page.mars_hemisphers[0].Image_url }} alt="Hemisphere1">
+                  <div class="caption">
+                    <h4>{{ mars_page.mars_hemisphers[0]["Title"] }}</h4>
+                  </div>
+                  </div>
+                    <div class="thumbnail" style="width: 50%; float:left;">
+                      <img src= {{ mars_page.mars_hemisphers[1].Image_url }} alt="Hemisphere2">
+                        <div class="caption">
+                          <h4>{{ mars_page.mars_hemisphers[1]["Title"] }}</h4>
+                        </div>
+                      </div>
+                      <div class="thumbnail" style="width: 50%; float:left;">
+                        <img src= {{ mars_page.mars_hemisphers[2].Image_url }} alt="Hemisphere3">
+                          <div class="caption">
+                            <h4>{{ mars_page.mars_hemisphers[2]["Title"] }}</h4>
+                          </div>
+                        </div>
+                        <div class="thumbnail" style="width: 50%; float:left;">
+                            <img src= {{ mars_page.mars_hemisphers[3].Image_url }} alt="Hemisphere4">
+                            <div class="caption">
+                                <h4>{{ mars_page.mars_hemisphers[3]["Title"] }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+        
 </body>
-
 </html>
